@@ -30,4 +30,14 @@ final as (
     from customers
     left join customer_orders using (customer_id)
 )
-select * from final
+,
+final_two as (
+    select 
+        final.*,
+        sum(orders.amount) as lifetime_value
+    from final 
+    join {{ref ("orders")}} on final.customer_id=orders.customer_id
+
+    group by final.customer_id, first_name, last_name, first_order_date, most_recent_order_date, number_of_orders
+)
+select * from final_two
