@@ -30,3 +30,19 @@ models:
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+  - name: orders
+    description: Finalizes clean order data
+    columns:
+      - name: order_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Every order needs a customer
+        tests:
+          - not_null
+      - name: amount
+        description: Amount paid for order
+        tests:
+          - not_null

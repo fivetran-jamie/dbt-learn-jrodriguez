@@ -6,21 +6,19 @@ with payments as (
 )
 ,
 stg_orders as (
-    select 
-        order_id,
-        customer_id
-    from  {{ref ('stg_orders') }}
+    select * from  {{ref ('stg_orders') }}
 )
 ,
 final as (
     select
         payments.order_id,
         stg_orders.customer_id,
-        sum(payments.amount) as amount
+        order_date,
+        coalesce(sum(payments.amount), 0) as amount
     from
     payments 
     join stg_orders on payments.order_id = stg_orders.order_id
-    group by 1,2
+    group by 1,2,3
 )
 
 select * from final

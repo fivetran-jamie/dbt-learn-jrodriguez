@@ -34,9 +34,9 @@ final as (
 final_two as (
     select 
         final.*,
-        sum(orders.amount) as lifetime_value
+        coalesce(sum(orders.amount), 0) as lifetime_value
     from final 
-    join {{ref ("orders")}} on final.customer_id=orders.customer_id
+    left join {{ref ("orders")}} on final.customer_id=orders.customer_id
 
     group by final.customer_id, first_name, last_name, first_order_date, most_recent_order_date, number_of_orders
 )
